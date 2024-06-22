@@ -11,7 +11,7 @@ export default class TaskItem implements ITask{
     constructor(  
         private _id:string = "",
         private _task:string = "",
-        private _completed:boolean,
+        private _completed:boolean = false,
     ){
      
     }
