@@ -33,6 +33,7 @@ li.className = "list-group-item d-flex gap-3 align-items-center";
 
 
      const checkBox = document.createElement("input") as HTMLInputElement;
+     
      checkBox.id = task.id;
      checkBox.type = "checkbox";
 checkBox.checked = task.completed;
@@ -53,8 +54,8 @@ checkBox.checked = task.completed;
 
 
      const deleteButton = document.createElement("button") as HTMLButtonElement;
-     deleteButton.className = "btn btn-primary";
-     deleteButton.textContent = "X"
+     deleteButton.className = "btn btn-primary btn-sm";
+     deleteButton.textContent = "Delete"
 li.append(deleteButton);
 
 deleteButton.addEventListener("click", ()=>{

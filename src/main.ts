@@ -10,6 +10,14 @@ const template = ListTemplete.instance;
 
 
 
+
+
+
+
+
+
+
+
 const todoForm = document.getElementById("todo-form") as HTMLFormElement
 
 
@@ -24,6 +32,7 @@ const todoValue = formData.get("new-todo") as string;
 if(todoValue === null || todoValue?.toString().trim() === "") return
 
 const newTask = new TaskItem(uuid(), todoValue.trim()) ;
+
 allTask.addTask(newTask);
 template.render(allTask);
 todoForm.reset()
@@ -33,6 +42,18 @@ todoForm.reset()
 
 
 }
+
+
+
+// clear all tasks
+const clearBtn = document.getElementById("clear-btn") as HTMLButtonElement;
+
+clearBtn.addEventListener("click",()=>{
+  allTask.clearTask();
+  template.clear();
+})
+
+
 
 allTask.load();
 template.render(allTask);

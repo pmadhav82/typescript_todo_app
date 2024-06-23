@@ -22,9 +22,9 @@ load(): void {
     const storedTasks: string | null = localStorage.getItem("myTodo");
     if(typeof storedTasks !== "string") return
 
-    const parsedTaskList: TaskItem[] = JSON.parse(storedTasks);
+    const parsedTaskList: {_id:string, _task:string, _completed:boolean}[]= JSON.parse(storedTasks);
     parsedTaskList.forEach(taskObj=>{
-        const newTaskList = new TaskItem(taskObj.id, taskObj.task, taskObj.completed);
+        const newTaskList = new TaskItem(taskObj._id, taskObj._task, taskObj._completed);
 
         TaskList.instance.addTask(newTaskList);
     })
@@ -36,8 +36,9 @@ save(): void {
 }
 
 clearTask(): void {
+
 this._tasks = [];
-this.save()
+localStorage.removeItem("myTodo");
 }
 
 
