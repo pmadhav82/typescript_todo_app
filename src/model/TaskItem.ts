@@ -1,4 +1,4 @@
-export interface ITask{
+export interface SingleTask{
     id:string,
     task:string,
     completed: boolean
@@ -6,7 +6,7 @@ export interface ITask{
 }
 
 
-export default class TaskItem implements ITask{
+export default class TaskItem implements SingleTask{
   
     constructor(  
         private _id:string = "",

@@ -1,18 +1,19 @@
-import TaskItem from "./TaskItem";
+import TaskItem from "./TaskItem"
 
 
-interface ITaskList{
+interface AllTask{
     tasks: TaskItem[],
     load(): void,
     save(): void,
     clearTask(): void,
     addTask(taskObj: TaskItem): void,
-    removeTask(id: string): void
+    removeTask(id: string): void,
+   editTask(id: string, updatedTaskText:string): void
 }
 
-export default class TaskList implements ITaskList{
-static instance: TaskList = new TaskList()
-    private constructor(private _tasks: TaskItem[]= []){}
+export default class TaskList implements AllTask{
+static instance: TaskList = new TaskList();
+    private constructor(private _tasks: TaskItem[]= []){};
 
 get tasks(): TaskItem[]{
     return this._tasks;
@@ -51,4 +52,13 @@ removeTask(id: string): void {
     this._tasks = this._tasks.filter(task=> task.id !== id);
     this.save()
 }
+
+editTask(id: string, updatedTaskText: string ): void {
+    if(updatedTaskText.trim() === "") return
+   this._tasks = this._tasks.map(task=>
+     task.id === id ? new TaskItem(task.id, updatedTaskText, task.completed): task);
+
+   this.save()
+
+    }
 }
