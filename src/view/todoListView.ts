@@ -4,15 +4,10 @@ import TaskItem from "../model/TaskItem";
 
 interface DOMList{
     ul: HTMLUListElement,
-    createTaskListElement(task: TaskItem, allTask: AllTask): HTMLLIElement,
-    createCheckBox(task: TaskItem, allTask: AllTask):HTMLInputElement,
-    createEditTaskInput(): HTMLInputElement,
-    createLabel(task:TaskItem): HTMLLabelElement,
-    createEditAndSaveButton(editTaskInput: HTMLInputElement, label: HTMLLabelElement, allTask: AllTask, task: TaskItem): HTMLButtonElement[]
-    createDeleteButton(allTask: AllTask, task: TaskItem): HTMLButtonElement,
+
     render(allTask: AllTask):void,
 
-    clear():void
+
 }
 
 
@@ -32,18 +27,17 @@ private constructor(){
 
 
 
-clear(): void {
+private clear(): void {
      this.ul.innerHTML = ""
 }
 
-createTaskListElement(task: TaskItem, allTask: AllTask): HTMLLIElement {
+ private createTaskListElement(task: TaskItem, allTask: AllTask): HTMLLIElement {
     
     const li = document.createElement("li") as HTMLLIElement;
 li.className = "list-group-item d-flex gap-3 align-items-center";
 li.dataset.taskId = task.id;
 
 
-// make method that return array of buttons
 const checkBox = this.createCheckBox(task, allTask);
 const label = this.createLabel(task);
 const editTaskInput = this.createEditTaskInput();
@@ -55,7 +49,7 @@ return li;
 
 }
 
-createCheckBox(task: TaskItem, allTask: AllTask): HTMLInputElement {
+private createCheckBox(task: TaskItem, allTask: AllTask): HTMLInputElement {
     
      const checkBox = document.createElement("input") as HTMLInputElement;
      checkBox.type = "checkbox";
@@ -69,7 +63,7 @@ checkBox.checked = task.completed;
 
 }
 
-createEditTaskInput(): HTMLInputElement {
+private createEditTaskInput(): HTMLInputElement {
          /// input field to edit task
      const editTaskInput = document.createElement("input") as HTMLInputElement;
      editTaskInput.hidden = true;
@@ -78,7 +72,7 @@ createEditTaskInput(): HTMLInputElement {
      return editTaskInput
 }
 
-createLabel(task: TaskItem): HTMLLabelElement {
+ private createLabel(task: TaskItem): HTMLLabelElement {
     const label = document.createElement("label") as HTMLLabelElement;
          label.htmlFor = task.id;
          label.textContent = task.task;
@@ -88,7 +82,7 @@ createLabel(task: TaskItem): HTMLLabelElement {
 
 
 
-createEditAndSaveButton(editTaskInput: HTMLInputElement,  label: HTMLLabelElement, allTask:AllTask, task: TaskItem): HTMLButtonElement[] {
+ private createEditAndSaveButton(editTaskInput: HTMLInputElement,  label: HTMLLabelElement, allTask:AllTask, task: TaskItem): HTMLButtonElement[] {
   
      const saveButton = document.createElement("button") as HTMLButtonElement;
      saveButton.hidden = true;
@@ -128,7 +122,7 @@ return [ saveButton, editButton]
 }
 
 
-createDeleteButton(allTask: AllTask, task:TaskItem): HTMLButtonElement {
+private createDeleteButton(allTask: AllTask, task:TaskItem): HTMLButtonElement {
 
 
 
