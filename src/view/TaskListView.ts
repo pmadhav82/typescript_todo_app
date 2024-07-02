@@ -1,63 +1,61 @@
-import AllTask from "../model/AllTask";
+
 import TaskItem from "../model/TaskItem";
-
-
+import TaskListController from "../controller/TaskListController";
 interface DOMList{
-    ul: HTMLUListElement,
 
-    render(allTask: AllTask):void,
-
+    clear(): void,
+    render(allTask: TaskItem[]):void,
 
 }
 
 
 
 
-export default class HTMLTodoListView implements DOMList{
+export default class HTMLTaskListView implements DOMList{
 
 
 
-static instace: HTMLTodoListView = new HTMLTodoListView();
-ul: HTMLUListElement;
-private constructor(){
+private ul: HTMLUListElement;
+private taskListController: TaskListController;
+ constructor(taskListController: TaskListController){
     this.ul = document.getElementById("taskList") as HTMLUListElement;
+    this.taskListController = taskListController;
 
     if(!this.ul) throw new Error("Could not find html ul element in html document.")
 }
 
 
 
-private clear(): void {
+ clear(): void {
      this.ul.innerHTML = ""
 }
 
- private createTaskListElement(task: TaskItem, allTask: AllTask): HTMLLIElement {
-    
+ private createTaskListElement(task: TaskItem): HTMLLIElement {
+
     const li = document.createElement("li") as HTMLLIElement;
 li.className = "list-group-item d-flex gap-3 align-items-center";
 li.dataset.taskId = task.id;
 
 
-const checkBox = this.createCheckBox(task, allTask);
+const checkBox = this.createCheckBox(task);
 const label = this.createLabel(task);
 const editTaskInput = this.createEditTaskInput();
-const [saveButton, editButton] = this.createEditAndSaveButton(editTaskInput, label, allTask, task);
-const deleteButton = this.createDeleteButton(allTask, task)
+const [saveButton, editButton] = this.createEditAndSaveButton(editTaskInput, label, task);
+const deleteButton = this.createDeleteButton( task)
 
 li.append(checkBox, editTaskInput, label, editButton, saveButton, deleteButton)
 return li;
 
 }
 
-private createCheckBox(task: TaskItem, allTask: AllTask): HTMLInputElement {
+private createCheckBox(task: TaskItem): HTMLInputElement {
     
      const checkBox = document.createElement("input") as HTMLInputElement;
      checkBox.type = "checkbox";
-checkBox.checked = task.completed;
+checkBox.checked = task.completed
      checkBox.addEventListener("change", ()=>{
-        task.completed = !task.completed;
-        allTask.save();
-}
+       this.taskListController.toggleTaskChange(task.id);
+     }
      )
      return checkBox
 
@@ -82,7 +80,7 @@ private createEditTaskInput(): HTMLInputElement {
 
 
 
- private createEditAndSaveButton(editTaskInput: HTMLInputElement,  label: HTMLLabelElement, allTask:AllTask, task: TaskItem): HTMLButtonElement[] {
+ private createEditAndSaveButton(editTaskInput: HTMLInputElement,  label: HTMLLabelElement, task: TaskItem): HTMLButtonElement[] {
   
      const saveButton = document.createElement("button") as HTMLButtonElement;
      saveButton.hidden = true;
@@ -97,11 +95,12 @@ private createEditTaskInput(): HTMLInputElement {
      
      saveButton.addEventListener("click", ()=>{
         const updatedTaskText = editTaskInput.value;
-         allTask.editTask(task.id, updatedTaskText);
+        task.task = updatedTaskText;
+         this.taskListController.editTask(task.id, updatedTaskText);
          saveButton.hidden = true;
          editButton.hidden = false;
          editTaskInput.hidden = true;
-     this.render(allTask);
+     this.render(this.taskListController.getTaskList());
      })
 
 
@@ -122,7 +121,7 @@ return [ saveButton, editButton]
 }
 
 
-private createDeleteButton(allTask: AllTask, task:TaskItem): HTMLButtonElement {
+private createDeleteButton( task:TaskItem): HTMLButtonElement {
 
 
 
@@ -131,8 +130,8 @@ private createDeleteButton(allTask: AllTask, task:TaskItem): HTMLButtonElement {
      deleteButton.textContent = "Delete"
 
 deleteButton.addEventListener("click", ()=>{
-    allTask.removeTask(task.id);
-    this.render(allTask);
+    this.taskListController.deleteTask(task.id);
+    this.render(this.taskListController.getTaskList());
 })
  return deleteButton
 
@@ -142,16 +141,16 @@ deleteButton.addEventListener("click", ()=>{
 
 
 
-render(allTask: AllTask): void {
+ render(allTask: TaskItem[]): void {
     
      this.clear();
 
- allTask.tasks.forEach(task=>{
+     allTask.forEach(task=>{
+        const li = this.createTaskListElement(task);
+        this.ul.append(li)
+     })
 
-     const li = this.createTaskListElement(task, allTask);
 
-this.ul.append(li);
-})
 
 
 
