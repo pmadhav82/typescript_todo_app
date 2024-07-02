@@ -8,13 +8,19 @@ import HTMLTaskListView from "./view/TaskListView";
 const taskListController = new TaskListController();
 const taskListView = new HTMLTaskListView(taskListController);
 const todoForm = document.getElementById("todo-form") as HTMLFormElement;
+const clearBtn = document.getElementById("clear-btn") as HTMLButtonElement;
+const showCompletedTask = document.getElementById(
+  "completed-task"
+) as HTMLButtonElement;
+const showTaskToComplete = document.getElementById(
+  "task-to-complete"
+) as HTMLButtonElement;
+const showAllTask = document.getElementById("all-task") as HTMLButtonElement;
 
-const initApp = ()=>{
-  const allTask =  taskListController.getTaskList();
+const initApp = () => {
+  const allTask = taskListController.getTaskList();
   taskListView.render(allTask);
-
-}
-
+};
 
 if (todoForm) {
   todoForm.addEventListener("submit", (e) => {
@@ -23,47 +29,33 @@ if (todoForm) {
     const todoValue = formData.get("new-todo") as string;
     if (todoValue === null || todoValue?.toString().trim() === "") return;
     const newTask = new TaskItem(uuid(), todoValue.trim());
-  
+
     taskListController.addTask(newTask);
 
-  initApp();
+    initApp();
 
     todoForm.reset();
   });
 }
 
-
-
-
-
-
 // clear all tasks
-const clearBtn = document.getElementById("clear-btn") as HTMLButtonElement;
-
-clearBtn.addEventListener("click", ()=>{
+clearBtn.addEventListener("click", () => {
   taskListController.clearTask();
   taskListView.clear();
-})
+});
 
 // show completed task
-const showCompletedTask = document.getElementById("completed-task") as HTMLButtonElement;
-showCompletedTask.addEventListener("click", ()=>{
-const completedTask = taskListController.getCompletedTask();
-taskListView.render(completedTask);
-
-})
+showCompletedTask.addEventListener("click", () => {
+  const completedTask = taskListController.getCompletedTask();
+  taskListView.render(completedTask);
+});
 //show task to complete
-const showTaskToComplete = document.getElementById("task-to-complete") as HTMLButtonElement;
-showTaskToComplete.addEventListener("click", ()=>{
-const taskToComplete = taskListController.getPendingTask();
-taskListView.render(taskToComplete);
-
-})
+showTaskToComplete.addEventListener("click", () => {
+  const taskToComplete = taskListController.getPendingTask();
+  taskListView.render(taskToComplete);
+});
 
 // show all task
-const showAllTask = document.getElementById("all-task") as HTMLButtonElement;
-showAllTask.addEventListener("click", initApp)
-
-
+showAllTask.addEventListener("click", initApp);
 
 initApp();
