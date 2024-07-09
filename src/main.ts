@@ -1,5 +1,4 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-
 import { v4 as uuid } from "uuid";
 import TaskItem from "./model/TaskItem";
 import TaskListController from "./controller/TaskListController";
@@ -21,7 +20,7 @@ const initApp = () => {
   const allTask = taskListController.getTaskList();
   taskListView.render(allTask);
 };
-
+initApp();
 if (todoForm) {
   todoForm.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -58,4 +57,4 @@ showTaskToComplete.addEventListener("click", () => {
 // show all task
 showAllTask.addEventListener("click", initApp);
 
-initApp();
+
